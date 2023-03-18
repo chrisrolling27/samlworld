@@ -1,16 +1,15 @@
 require('dotenv').config();
 var path = require('path');
 var fs = require('fs');
-
 var express = require('express');
 var session = require('express-session');
 var passport = require('passport');
 var saml = require('passport-saml').Strategy;
-
 var bodyParser = require('body-parser');
 
 var userProfile;
 var app = express();
+
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
@@ -60,6 +59,7 @@ app.get('/app', redirectToLogin, (req, res) => {
 		heading: 'Logged-In to Express Web Application'
 	});
 });
+
 
 app.get(
 	'/app/login',
