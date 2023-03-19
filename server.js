@@ -53,6 +53,9 @@ var redirectToLogin = (req, res, next) => {
 	next();
 };
 
+
+
+
 app.get('/app', redirectToLogin, (req, res) => {
 	res.render('index', {
 		title: 'Express Web Application',
