@@ -10,7 +10,6 @@ var bodyParser = require('body-parser');
 var userProfile;
 var app = express();
 
-
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -36,9 +35,12 @@ var strategy = new saml(
 		entryPoint: process.env.SAML_ENTRYPOINT,
 		issuer: process.env.SAML_ISSUER,
 		protocol: process.env.SAML_PROTOCOL,
-		logoutUrl: process.env.SAML_LOGOUTURL
+		logoutUrl: process.env.SAML_LOGOUTURL,
+		privateCert: fs.readFileSync('./security/private-key.pem', 'utf-8'),
+		cert: fs.readFileSync('./security/wso2carbon.pem', 'utf8')
 	},
 	(profile, done) => {
+		
 		userProfile = profile;
 		done(null, userProfile);
 	}
@@ -53,7 +55,9 @@ var redirectToLogin = (req, res, next) => {
 	next();
 };
 
-
+app.get('/', (req, res) => {
+	res.send('hello!')
+});
 
 
 app.get('/app', redirectToLogin, (req, res) => {
@@ -86,7 +90,7 @@ app.get('/app/logout', (req, res) => {
 });
 
 app.get('/app/failed', (req, res) => {
-	res.status(401).send('Login failed');
+	res.status(401).send('Login failed!!!');
 });
 
 app.post(
@@ -119,3 +123,5 @@ app.post('/app/home', (req, res) => {
 });
 
 app.listen(process.env.PORT || 3000);
+
+
