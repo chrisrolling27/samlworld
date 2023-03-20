@@ -45,7 +45,6 @@ var strategy = new saml(
 		done(null, userProfile);
 	}
 );
-
 passport.use(strategy);
 
 var redirectToLogin = (req, res, next) => {
@@ -59,14 +58,12 @@ app.get('/', (req, res) => {
 	res.send('hello!')
 });
 
-
 app.get('/app', redirectToLogin, (req, res) => {
 	res.render('index', {
 		title: 'Express Web Application',
 		heading: 'Logged-In to Express Web Application'
 	});
 });
-
 
 app.get(
 	'/app/login',
@@ -101,19 +98,20 @@ app.post(
 	}),
 	(req, res) => {
 
-		// saml assertion extraction from saml response
-		// var samlResponse = res.req.body.SAMLResponse;
-		// var decoded = base64decode(samlResponse);
-		// var assertion =
-		// 	('<saml2:Assertion' + decoded.split('<saml2:Assertion')[1]).split(
-		// 		'</saml2:Assertion>'
-		// 	)[0] + '</saml2:Assertion>';
-		// var urlEncoded = base64url(assertion);
+		//saml assertion extraction from saml response
+		var samlResponse = res.req.body.SAMLResponse;
+		var decoded = base64decode(samlResponse);
+		var assertion =
+			('<saml2:Assertion' + decoded.split('<saml2:Assertion')[1]).split(
+				'</saml2:Assertion>'
+			)[0] + '</saml2:Assertion>';
+		var urlEncoded = base64url(assertion);
 
 		// success redirection to /app
 		return res.redirect('/app');
 	}
 );
+
 
 app.post('/app/home', (req, res) => {
 	res.render('home', {
